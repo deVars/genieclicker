@@ -15,9 +15,8 @@ import com.adobe.genie.genieCom.SWFApp;
 import com.adobe.genie.genieUIRobot.UIFunctions;
 import com.adobe.genie.utils.Utils;
 
-import java.awt.*;
+import java.awt.AWTException;
 import java.util.*;
-import java.util.List;
 
 
 public class Clicker extends GenieScript {
@@ -429,8 +428,17 @@ public class Clicker extends GenieScript {
     private void metakeyClick(GenieDisplayObject button)
 			throws StepTimedOutException, StepFailedException, InterruptedException, AWTException {
 		// uiKeyBoard.pressKey(metakey);
-		ArrayList<String> argsList = Utils.getArrayListFromStringParams("CONTROL",
-				"1", "3000");
+        String osName = System.getProperty("os.name").toLowerCase();
+        String delayString;
+
+        if(osName.startsWith("mac") || osName.startsWith("windows")) {
+            delayString = "3000";
+        } else {
+            delayString = "3500";
+        }
+
+		ArrayList<String> argsList =
+                Utils.getArrayListFromStringParams("CONTROL", "1", delayString);
 		dvXA dvxa = new dvXA(button, BaseEvent.CLICK_EVENT,
 				GenieLogEnums.GenieStepType.STEP_NATIVE_TYPE,
 				button.getClass().getSimpleName(),
